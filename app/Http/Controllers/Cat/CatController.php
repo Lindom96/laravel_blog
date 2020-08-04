@@ -69,7 +69,6 @@ class CatController extends Model
         $name = $request->name;
         $cover = $request->cover ?? '//www.google.cn/landing/cnexp/google-search.png';
         $description = $request->description;
-        // $createDate = $request->create_date;
         $res = Cat::updateCat($cid, $name, $description, $cover);
         return $res;
     }
