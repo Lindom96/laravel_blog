@@ -71,10 +71,11 @@ class Author extends Model
     /**
      * 取得所有作者（除管理员）
      */
-    static public function getAuthors()
+    static public function getAuthors(int $id = null)
     {
+
         $authors = self::select('id', 'name', 'password', 'email', 'avatar', 'description')
-            ->where('auth', '8')
+            ->where([['auth', '8'], ['id', $id]])
             ->get();
         return $authors;
     }
@@ -88,7 +89,6 @@ class Author extends Model
         $author = self::find($id);
         $author->email = $email;
         $author->description = $description;
-        $author->avatar = $avatar;
         $author->auth = $auth;
         if ($author->save()) {
             return $output = array(

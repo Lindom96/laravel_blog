@@ -12,9 +12,10 @@ class AuthorController extends Controller
     /**
      * 取得所有作者（除管理员）
      */
-    public function getAuthors()
+    public function getAuthors(Request $request)
     {
-        $authors = Author::getAuthors();
+        $id = $request->id;
+        $authors = Author::getAuthors($id);
         foreach ($authors as $author) {
             $output[] = array(
                 'id' => $author->id,
@@ -53,13 +54,25 @@ class AuthorController extends Controller
     {
         $id = $request->id;
         $email = $request->email;
-        $avatar = $request->avatar ?? '111';
         $description = $request->description;
         $auth = $request->auth;
-        $res = Author::updateAuthor($id, $email, $avatar, $description, $auth);
+        $res = Author::updateAuthor($id, $email, $description, $auth);
         return $res;
     }
 
+    /**
+     * 修改头像
+     *
+     * @return Response
+     * @author Lindom
+     */
+    public function setAvatar(Request $request)
+    {
+
+        return array(
+            'success' => true
+        );
+    }
     /**
      * 删除作者
      *

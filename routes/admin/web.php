@@ -4,12 +4,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/login', 'Admin\LoginController@login');
     //取得除管理员外所有作者
     Route::get('/authors/other', 'Admin\AuthorController@getAuthors');
+    //取得某个作者信息
+    Route::get('/author/info', 'Admin\AuthorController@getAuthors');
     //取得除管理员外所有作者 
     Route::get('/authors', 'Admin\AuthorController@getAuthors');
     //添加作者
     Route::post('/authors', 'Admin\AuthorController@addAuthor');
     //编辑作者
     Route::put('/author/info', 'Admin\AuthorController@setAuthor');
+    //编辑作者头像
+    Route::put('/author/avatar', 'Admin\AuthorController@setAvatar');
     //删除作者
     Route::delete('/author', 'Admin\AuthorController@deleteAuthor');
     //修改密码
@@ -19,6 +23,9 @@ Route::group(['prefix' => 'admin'], function () {
 
 //添加文档
 Route::post('/file', 'File\FileController@addFiles');
+//编辑作者头像
+Route::put('/file', 'File\FileController@addFiles');
+
 //取得所有文章
 Route::get('/articles', 'Article\ArticleController@getArticles');
 //取得所有文章

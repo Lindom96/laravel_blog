@@ -29,15 +29,15 @@ class FileController extends Controller
         $file = $this->_getFile($var);
         $fileUrl = '';
         // $fileExt = $this->_getFileExts($_FILES[$var]['name']);
-        if (file_exists("upload/" . $file["name"])) {
-            $fileUrl = "upload/" . $file["name"];
-        } else {
+        // if (file_exists("upload/" . $file["name"])) {
+        //     $fileUrl = "upload/" . $file["name"];
+        // } else {
             move_uploaded_file(
                 $file["tmp_name"],
                 "upload/" . $file["name"]
             );
             $fileUrl = "upload/" . $file["name"];
-        }
+        // }
 
         // $name = $request->name;
         // $type = $request->type;
