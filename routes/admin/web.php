@@ -45,3 +45,13 @@ Route::delete('/tag', 'Tag\TagController@delTag');
 
 //取得所有评论
 Route::get('/comments', 'Comment\CommentController@getComments');
+
+
+//取得所有友链
+Route::get('/blog/friends', 'Blog\BlogController@getFriends');
+//新增友链
+Route::post('/blog/friend', 'Blog\BlogController@addFriend');
+//更新友链
+Route::put('/blog/friend', 'Blog\BlogController@setFriend');
+//删除友链
+Route::delete('/blog/friend', 'Blog\BlogController@delFriend');

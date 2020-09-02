@@ -31,14 +31,15 @@ class LoginController extends Controller
         // \Config::set('jwt.user' , "App\Models\Admin");
         // \Config::set('auth.providers.users.model', \App\Models\Admin::class);
 
-        $userId = Author::checkUser($newUser[0]['username']);
-        if (!empty($userId)) {
+        $author = Author::checkUser($newUser[0]['username']);
+        if ($author) {
 
             // $payload = JWTFactory::make($newUser);
             // $token = JWTAuth::encode($payload);
             $user = array([
-                'id' => $userId,
+                'id' => $author->id,
                 'name' => $newUser[0]['username'],
+                'avatar' => $author->avatar
                 // 'token' => $token
             ]);
             return $user[0];

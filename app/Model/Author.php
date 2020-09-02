@@ -26,7 +26,10 @@ class Author extends Model
      */
     static public function checkUser(String $name)
     {
-        return self::where('name', $name)->value('id');
+        $res = self::select('id', 'avatar')
+            ->where('name', $name)
+            ->get();
+        return $res[0];
     }
     /**
      * 注册账号
