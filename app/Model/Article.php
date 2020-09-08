@@ -12,31 +12,28 @@ class Article extends Model
     /**
      * 取得所有文章
      */
-    static public function getArticles(int $start = null, int $count = null, int $authorId, string $catId = null, int $tags = null, int $public = null, int $status = null, int $star = null)
+    static public function getArticles(int $start = null, int $count = null, int $authorId, int $catId, int $tags, int $public, int $status, int $star)
     {
-        $where1 = [
-            ['AND', 'cat_id', '=', $catId, 0],
-            // ['AND', 'title', 'REGEXP', $query, 0],
-            ['AND', 'tags', '=', $tags, 0],
-            ['AND', 'public', '=', $public, 0],
-            ['AND', 'status', '=', $status, 0],
-            ['AND', 'star', '=', $star, 0]
-        ];
-        $where = [
-            ['cat_id', $catId, 0],
-            ['tags', $tags, 0],
-            ['public', $public, 0],
-            ['status',  $status, 0],
-            ['star',  $star, 0]
-        ];
-        return self::select(['id', 'cat_id', 'authors', 'title', 'tags', 'description', 'public', 'status', 'star','created_at'])
+        $author = $authorId == 0 ? null : ['authors' => $authorId];
+        $cat = $catId == 0 ? null : ['cat_id' => $catId];
+        $tag = $tags == 0 ? null : ['tags' => $tags];
+        $pub = $public == 0 ? null : ['public' => $public];
+        $statu = $status == 0 ? null : ['status' =>  $status];
+        $s = $star == 0 ? null : ['star' => $star];
+        $articles = self::select(['id', 'cat_id', 'authors', 'title', 'tags', 'description', 'public', 'status', 'star', 'created_at'])
             // ->where(function ($q) {  //闭包返回的条件会包含在括号中
             //     return $q->Where([]);
             // })
-            // ->where($where)
+            ->where($author)
+            ->where($cat)
+            ->where($tag)
+            ->where($pub)
+            ->where($statu)
+            ->where($s)
             ->orderby('id', 'DESC')
             // ->limit($start, $count)
             ->get();
+        return $articles;
     }
 
     /**

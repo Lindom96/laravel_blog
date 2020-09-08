@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Article;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Article;
+use App\Model\Author;
+use App\Model\Cat;
+use App\Model\Tag;
 
 class ArticleController extends Controller
 {
@@ -21,44 +24,55 @@ class ArticleController extends Controller
         $count = $request->count ?? 15;
         $title = $request->title;
         $catId = $request->categoryId;
-        $catId == 0 ? null : $catId;
         $authorId = $request->authorId;
-        $authorId == 0 ? null : $authorId;
         $tagId = $request->tagId;
-        $tagId == 0 ? null : $tagId;
         $public = $request->publicId;
-        $public == 0 ? null : $public;
         $status = $request->statusId;
-        $status == 0 ? null : $status;
         $star = $request->starId;
-        $star == 0 ? null : $star;
-        $query = $request->query;
-        $articles = Article::getArticles($start, $count, $authorId, $title, $catId, $tagId, $public, $status, $star);
 
-        $output = null;
-        if (!empty($articles)) {
-            foreach ($articles as $article) {
-                $output[] = [
-                    'id' => $article->id,
-                    // 'authors' => $article->authors,
-                    'authors' => array(
-                        ['id' => 1, 'name' => 'admin110']
-                    ),
-                    'category' => array('c_id' => 1, 'name' => '日记110'),
-                    'public' => $article->public,
-                    'star' => $article->star,
-                    'tags' => array(
-                        ['id' => 1, 'name' => 'php']
-                    ),
-                    'created_date'=>$article->created_at,
-                    'status' => $article->status,
-                    'description' => $article->description,
-                    'title' => $article->title
-                ];
-            }
+        $articles = Article::getArticles($start, $count, $authorId, $catId, $tagId, $public, $status, $star);
+
+        $output = [];
+        if (empty($articles)) {
             return $output;
         }
-        return [];
+        //取得作者
+        $authorIds = null;
+        //取得分类
+        $catIds = null;
+        //取得标签
+        $tagIds = null;
+        foreach ($articles as $article) {
+            $authorIds[] = $article->authors;
+            $catIds[] = $article->cat_id;
+            $tagIds[] = $article->tags;
+        }
+        $authorsName = Author::getAuthorById($authorIds);
+
+        $catsName = Cat::getCatById($catIds);
+
+        $tagsName = Tag::getTagById($tagIds);
+        //取得文章
+        foreach ($articles as $article) {
+            $idx = 'id_' . $article->authors;
+            $output[] = [
+                'id' => $article->id,
+                'authors' => array(
+                    ['id' => $article->authors, 'name' => $authorsName] //offset:1问题尚未解决；
+                ),
+                'category' => array('c_id' => $article->cat_id, 'name' => $catsName[$article->cat_id]),
+                'public' => $article->public,
+                'star' => $article->star,
+                'tags' => array(
+                    ['id' => $article->tags, 'name' => $tagsName[$article->tags]]
+                ),
+                'created_date' => $article->created_at,
+                'status' => $article->status,
+                'description' => $article->description,
+                'title' => $article->title
+            ];
+        }
+        return $output;
     }
 
     /**
