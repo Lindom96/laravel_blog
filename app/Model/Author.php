@@ -73,13 +73,36 @@ class Author extends Model
      */
     static public function getAuthors(int $id = null)
     {
-
+        if (isset($id)) {
+            $where = array('auth' => '8', 'id' => $id);
+        } else {
+            $where = array('auth' => '8');
+        }
         $authors = self::select('id', 'name', 'password', 'email', 'avatar', 'description')
-            ->where([['auth', '8'], ['id', $id]])
+            ->where($where)
             ->get();
         return $authors;
     }
-
+    /**
+     * 根据ID取得作者
+     */
+    static public function getAuthorById($id)
+    {
+        if (isset($id)) {
+            $where = array('auth' => '8', 'id' => $id);
+        } else {
+            $where = array('auth' => '8');
+        }
+        $authors = self::select('id', 'name')
+            ->where($where)
+            ->orderby('id', 'DESC')
+            ->get();
+        $names = null;
+        foreach ($authors as $author) {
+            $names['id_' . $author->id] = $author->name;
+        }
+        return $names;
+    }
 
     /**
      * 编辑作者

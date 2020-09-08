@@ -16,6 +16,8 @@ class AuthorController extends Controller
     {
         $id = $request->id;
         $authors = Author::getAuthors($id);
+        
+        // var_dump($authors);
         foreach ($authors as $author) {
             $output[] = array(
                 'id' => $author->id,
