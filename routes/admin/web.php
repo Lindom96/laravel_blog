@@ -9,7 +9,7 @@ Route::group(['prefix' => 'admin'], function () {
     //取得除管理员外所有作者 
     Route::get('/authors', 'Admin\AuthorController@getAuthors');
     //添加作者
-    Route::post('/authors', 'Admin\AuthorController@addAuthor');
+    Route::post('/author', 'Admin\AuthorController@addAuthor');
     //编辑作者
     Route::put('/author/info', 'Admin\AuthorController@setAuthor');
     //编辑作者头像
