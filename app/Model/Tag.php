@@ -11,13 +11,35 @@ class Tag extends Model
     /**
      * 取得所有标签 $start, $count, $name, $avatar, $query
      */
-    static public function getTags()
+    static public function getTags(int $id = null)
     {
         // int $start = null, int $count = null
 
         return self::select(['t_id', 'name'])
             ->orderby('t_id', 'DESC')
             ->get();
+    }
+
+
+    /**
+     * 根据ID取得标签
+     */
+    static public function getTagById($id)
+    {
+        if (isset($id)) {
+            $where = array('t_id' => $id);
+        } else {
+            $where = null;
+        }
+        $tags = self::select('t_id', 'name')
+            ->where($where)
+            ->orderby('t_id', 'DESC')
+            ->get();
+        $names = null;
+        foreach ($tags as $tag) {
+            $names[$tag->t_id] = $tag->name;
+        }
+        return $names;
     }
     /**
      * 新增标签
