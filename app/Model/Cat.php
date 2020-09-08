@@ -18,16 +18,31 @@ class Cat extends Model
      */
     static public function getCats()
     {
-        $where = [
-            // ['AND', 'name', '=', $name, 0],
-            // ['AND', 'title', 'REGEXP', $query, 0],
-            // ['AND', 'cover', '=', $cover, 0]
-        ];
-
         return self::select('c_id', 'name', 'cover', 'description')
-            // ->where($where)
             // ->limit($start, $count)
             ->get();
+    }
+
+
+    /**
+     * 根据ID取得作者
+     */
+    static public function getCatById($id)
+    {
+        if (isset($id)) {
+            $where = array('c_id' => $id);
+        } else {
+            $where = null;
+        }
+        $cats = self::select('c_id', 'name')
+            ->where($where)
+            ->orderby('c_id', 'DESC')
+            ->get();
+        $names = null;
+        foreach ($cats as $cat) {
+            $names[$cat->c_id] = $cat->name;
+        }
+        return $names;
     }
 
     /**
