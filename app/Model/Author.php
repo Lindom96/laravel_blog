@@ -89,17 +89,20 @@ class Author extends Model
     static public function getAuthorById($id)
     {
         if (isset($id)) {
-            $where = array('auth' => '8', 'id' => $id);
+            $authors = self::select('id', 'name')
+                ->where('auth', '8')
+                ->whereIn('id', $id)
+                ->orderby('id', 'DESC')
+                ->get();
         } else {
-            $where = array('auth' => '8');
+            $authors = self::select('id', 'name')
+                ->where('auth', '8')
+                ->orderby('id', 'DESC')
+                ->get();
         }
-        $authors = self::select('id', 'name')
-            ->where($where)
-            ->orderby('id', 'DESC')
-            ->get();
         $names = null;
         foreach ($authors as $author) {
-            $names['id_' . $author->id] = $author->name;
+            $names[$author->id] = $author->name;
         }
         return $names;
     }
@@ -107,7 +110,7 @@ class Author extends Model
     /**
      * 编辑作者
      */
-    static public function updateAuthor(int $id, string $email, string $avatar = null, string $description, int $auth)
+    static public function updateAuthor(int $id, string $email, string $description, int $auth)
     {
         $author = self::find($id);
         $author->email = $email;

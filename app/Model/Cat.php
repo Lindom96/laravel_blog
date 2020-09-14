@@ -30,14 +30,15 @@ class Cat extends Model
     static public function getCatById($id)
     {
         if (isset($id)) {
-            $where = array('c_id' => $id);
+            $cats = self::select('c_id', 'name')
+                ->whereIn('c_id', $id)
+                ->orderby('c_id', 'DESC')
+                ->get();
         } else {
-            $where = null;
+            $cats = self::select('c_id', 'name')
+                ->orderby('c_id', 'DESC')
+                ->get();
         }
-        $cats = self::select('c_id', 'name')
-            ->where($where)
-            ->orderby('c_id', 'DESC')
-            ->get();
         $names = null;
         foreach ($cats as $cat) {
             $names[$cat->c_id] = $cat->name;

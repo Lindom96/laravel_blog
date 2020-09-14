@@ -72,10 +72,10 @@ class TagController extends Model
    * @return Response
    * @author Lindom
    */
-  public function delTags(Request $request)
+  public function delTag(Request $request)
   {
-    $tagIds = $request->tag_id;
-    $res = Tag::delTags($tagIds);
+    $tagIds = $request->id;
+    $res = Tag::deleteTag($tagIds);
     if (isset($res)) {
       return $res;
     }

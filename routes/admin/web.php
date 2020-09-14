@@ -29,7 +29,19 @@ Route::put('/file', 'File\FileController@addFiles');
 //取得所有文章
 Route::get('/articles', 'Article\ArticleController@getArticles');
 //取得所有文章
+Route::post('/article', 'Article\ArticleController@addArticle');
+//取得所有文章内容
 Route::get('/article/content', 'Article\ArticleController@getContent');
+//修改文章
+Route::put('/article', 'Article\ArticleController@updateArticle');
+//修改精选
+Route::put('/article/star', 'Article\ArticleController@setStar');
+//修改公开
+Route::put('/article/public', 'Article\ArticleController@setPublic');
+//修改状态
+Route::put('/article/status', 'Article\ArticleController@setStatus');
+//删除文章
+Route::delete('/article', 'Article\ArticleController@delArticle');
 
 //取得所有分类
 Route::get('/cats', 'Cat\CatController@getCats');
@@ -51,7 +63,7 @@ Route::put('/tag', 'Tag\TagController@setTag');
 Route::delete('/tag', 'Tag\TagController@delTag');
 
 //取得所有评论
-Route::get('/comments', 'Comment\CommentController@getComments');
+Route::get('/messages', 'Comment\CommentController@getComments');
 
 
 //取得所有友链

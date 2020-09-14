@@ -14,16 +14,16 @@ class CommentController extends Model
      * @return Response
      * @author Lindom
      */
-    public function getComms(Request $request)
+    public function getComments(Request $request)
     {
-        $start = $request->start ?? 0;
+        $start = $request->page ?? 0;
         $count = $request->count ?? 15;
         $query = $request->query;
-        $comms = Comment::getComms($start, $count, $query);
-        $output = null;
+        $comms = Comment::getComments();
+        $output = [];
         if (!isset($comms)) {
             foreach ($comms as $comm) {
-                $output[] = [
+                return $output[] = [
                     'id' => $comm->id,
                     'nickname' => $comm->nickname,
                     'replyname' => $comm->replyname,
@@ -32,7 +32,7 @@ class CommentController extends Model
                     'content ' => $comm->content
                 ];
             }
-            return json_decode($output);
+            return [];
         }
     }
 
@@ -71,4 +71,3 @@ class CommentController extends Model
         }
     }
 }
-

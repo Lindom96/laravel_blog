@@ -58,7 +58,7 @@ class ArticleController extends Controller
             $output[] = [
                 'id' => $article->id,
                 'authors' => array(
-                    ['id' => $article->authors, 'name' => $authorsName] //offset:1问题尚未解决；
+                    ['id' => $article->authors, 'name' => $authorsName[$article->authors]] //offset:1问题尚未解决；
                 ),
                 'category' => array('c_id' => $article->cat_id, 'name' => $catsName[$article->cat_id]),
                 'public' => $article->public,
@@ -84,18 +84,18 @@ class ArticleController extends Controller
     public function addArticle(Request $request)
     {
         $title = $request->title;
-        $author = $request->author;
+        $author = $request->authors[0];
         $description = $request->description;
-        $createDate = $request->create_date;
+        $createDate = $request->createdDate;
         $cover = $request->cover;
         $content = $request->content;
-        $catId = $request->cat_id;
-        $tags = $request->tags;
+        $catId = $request->categoryId;
+        $tags = $request->tags[0]; //需修改为array
         $public = $request->public;
         $status = $request->status;
         $star = $request->star;
-        $res = Article::addArticles($title, $author, $description, $createDate, $cover, $content, $catId, $tags, $public, $status, $star);
-        return json_decode($res);
+        $res = Article::addArticle($title, $author, $description, $createDate, $cover, $content, $catId, $tags, $public, $status, $star);
+        return $res;
     }
 
     /**
@@ -104,21 +104,22 @@ class ArticleController extends Controller
      * @return Response
      * @author Lindom
      */
-    public function setArticle(Request $request)
+    public function updateArticle(Request $request)
     {
+        $id = $request->id;
         $title = $request->title;
-        $author = $request->author;
+        $author = $request->authors[0];
         $description = $request->description;
-        $createDate = $request->create_date;
+        $createDate = $request->createdDate;
         $cover = $request->cover;
         $content = $request->content;
-        $catId = $request->cat_id;
-        $tags = $request->tags;
+        $catId = $request->categoryId;
+        $tags = $request->tags[0]; //需修改为array
         $public = $request->public;
         $status = $request->status;
         $star = $request->star;
-        $res = Article::setArticles($title, $author, $description, $createDate, $cover, $content, $catId, $tags, $public, $status, $star);
-        return json_decode($res);
+        $res = Article::setArticles($id, $title, $author, $description, $createDate, $cover, $content, $catId, $tags, $public, $status, $star);
+        return $res;
     }
 
     /**
@@ -129,9 +130,9 @@ class ArticleController extends Controller
      */
     public function delArticle(Request $request)
     {
-        $articleId = $request->articleId;
-        $res = Article::delArticles($articleId);
-        return json_decode($res);
+        $articleId = $request->id;
+        $res = Article::delArticle($articleId);
+        return $res;
     }
     /**
      * 取得文章内容
@@ -144,5 +145,46 @@ class ArticleController extends Controller
         $articleId = $request->id;
         $res = Article::getContent($articleId);
         return $res[0];
+    }
+
+    /**
+     * 设置精选
+     *
+     * @return Response
+     * @author Lindom
+     */
+    public function setStar(Request $request)
+    {
+        $articleId = $request->id;
+        $star = $request->star;
+        $res = Article::setStar($articleId, $star);
+        return $res;
+    }
+
+    /**
+     * 设置公开
+     *
+     * @return Response
+     * @author Lindom
+     */
+    public function setPublic(Request $request)
+    {
+        $articleId = $request->id;
+        $public = $request->public;
+        $res = Article::setPublic($articleId, $public);
+        return $res;
+    }
+    /**
+     * 设置状态
+     *
+     * @return Response
+     * @author Lindom
+     */
+    public function setStatus(Request $request)
+    {
+        $articleId = $request->id;
+        $status = $request->status;
+        $res = Article::setStatus($articleId, $status);
+        return $res;
     }
 }

@@ -27,14 +27,15 @@ class Tag extends Model
     static public function getTagById($id)
     {
         if (isset($id)) {
-            $where = array('t_id' => $id);
+            $tags = self::select('t_id', 'name')
+                ->whereIn('t_id', $id)
+                ->orderby('t_id', 'DESC')
+                ->get();
         } else {
-            $where = null;
+            $tags = self::select('t_id', 'name')
+                ->orderby('t_id', 'DESC')
+                ->get();
         }
-        $tags = self::select('t_id', 'name')
-            ->where($where)
-            ->orderby('t_id', 'DESC')
-            ->get();
         $names = null;
         foreach ($tags as $tag) {
             $names[$tag->t_id] = $tag->name;
@@ -75,6 +76,24 @@ class Tag extends Model
         return $output = array(
             'success' => false,
             'message' => '编辑失败'
+        );
+    }
+
+    /**
+     * 删除分类
+     */
+    static public function deleteTag(int $id)
+    {
+        $tag = self::destroy($id);
+        if ($tag) {
+            return array(
+                'success' => true,
+                'message' => '删除成功'
+            );
+        }
+        return array(
+            'success' => false,
+            'message' => '删除失败'
         );
     }
 }
