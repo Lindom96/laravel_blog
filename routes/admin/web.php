@@ -28,6 +28,8 @@ Route::put('/file', 'File\FileController@addFiles');
 
 //取得所有文章
 Route::get('/articles', 'Article\ArticleController@getArticles');
+//根据ID取得文章
+Route::get('/article', 'Article\ArticleController@getArticle');
 //取得所有文章
 Route::post('/article', 'Article\ArticleController@addArticle');
 //取得所有文章内容
