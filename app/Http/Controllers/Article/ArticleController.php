@@ -66,12 +66,55 @@ class ArticleController extends Controller
                 'tags' => array(
                     ['id' => $article->tags, 'name' => $tagsName[$article->tags]]
                 ),
+                'cover' => $article->cover,
                 'created_date' => $article->created_at,
                 'status' => $article->status,
                 'description' => $article->description,
                 'title' => $article->title
             ];
         }
+        return $output;
+    }
+    /**
+     * 取得文章内容
+     *
+     * @return Response
+     * @author Lindom
+     */
+    public function getArticle(Request $request)
+    {
+        $articleId = $request->id;
+        $article = Article::getArticle($articleId);
+        //取得作者
+        $authorIds = null;
+        //取得分类
+        $catIds = null;
+        //取得标签
+        $tagIds = null;
+        $authorIds[] = $article->authors;
+        $catIds[] = $article->cat_id;
+        $tagIds[] = $article->tags;
+        $authorsName = Author::getAuthorById($authorIds);
+        $catsName = Cat::getCatById($catIds);
+        $tagsName = Tag::getTagById($tagIds);
+        $output[] = [
+            'id' => $article->id,
+            'authors' => array(
+                ['id' => $article->authors, 'name' => $authorsName[$article->authors]] //offset:1问题尚未解决；
+            ),
+            'category' => array('c_id' => $article->cat_id, 'name' => $catsName[$article->cat_id]),
+            'public' => $article->public,
+            'star' => $article->star,
+            'tags' => array(
+                ['id' => $article->tags, 'name' => $tagsName[$article->tags]]
+            ),
+            'cover' => $article->cover,
+            'content' => $article->content,
+            'created_date' => $article->created_at,
+            'status' => $article->status,
+            'description' => $article->description,
+            'title' => $article->title
+        ];
         return $output;
     }
 

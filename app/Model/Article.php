@@ -20,7 +20,7 @@ class Article extends Model
         $pub = $public == 0 ? null : ['public' => $public];
         $statu = $status == 0 ? null : ['status' =>  $status];
         $s = $star == 0 ? null : ['star' => $star];
-        $articles = self::select(['id', 'cat_id', 'authors', 'title', 'tags', 'description', 'public', 'status', 'star', 'created_at'])
+        $articles = self::select(['id', 'cat_id', 'authors', 'title', 'tags', 'description', 'public', 'status', 'star', 'created_at','cover'])
             ->where($author)
             ->where($cat)
             ->where($tag)
@@ -31,6 +31,17 @@ class Article extends Model
             // ->limit($start, $count)
             ->get();
         return $articles;
+    }
+
+    /**
+     * 根据ID取得文章所有信息
+     */
+    static public function getArticle(int $articleId)
+    {
+
+        $article = self::where('id', $articleId)
+            ->get();
+        return $article[0];
     }
     /**
      * 添加文章
@@ -98,6 +109,7 @@ class Article extends Model
             ->where('id', $articleId)
             ->get();
     }
+
 
 
     /**
